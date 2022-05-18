@@ -2,6 +2,7 @@
 # Imports the main grid variable from odds Scrapper (MORE VARIABLES WILL BE MADE WITH MORE SCRAPES)
 
 # Grab the index to the corisponding bookies
+#TODO might want to grab multiple arbitrage oportunities if you can (program doesn't do that yet)
 class Calculations:
   def __init__(self, grid) -> None:
     self.grid = grid
@@ -44,7 +45,10 @@ class Calculations:
     if(impProb < 1):
       self.betOdds1 = odds1
       self.betOdds2 = odds2
+      print("======")
       self.printAll()
+      # assumed pay out is $100
+      self.moneyRatio(odds1, odds2, 100)
       return True
     return False
 
@@ -68,7 +72,6 @@ class Calculations:
         # self.team1 = grids[r][0]
         # self.team2 = grids[r+1][0]
       if(self.bestChance(matchSet)):
-        #TODO find which sites and which matches
         # print(matchSet)
         return True
       r+=2
@@ -101,5 +104,14 @@ class Calculations:
     return self.isArbitrage(large1,large2)
 
 #TODO Find out how much money should be put down (or at least a ratio if arbitrage)
-  def moneyRatio(self):
-    return;
+  def moneyRatio(self, odds1, odds2, payout):
+    #https://thearbacademy.com/arbitrage-calculation/ this website might help
+    odd1 = self.toDecimal(odds1)
+    odd2 = self.toDecimal(odds2)
+
+    stake1 = (payout)/odd1
+    stake2 = (payout)/odd2
+    print("Bet $", stake1, " on ", self.team1, " to win $", payout - stake1, " profit")
+    print("Bet $", stake2, " on ", self.team2, " to win $", payout - stake2, " profit")
+    print("Net profit is $", payout-stake1-stake2)
+    print("======")
