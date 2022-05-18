@@ -1,5 +1,7 @@
 import math
 from unittest import skip
+
+import pandas as pd
 from Calculations import Calculations
 from selenium import webdriver
 import chromedriver_autoinstaller
@@ -10,7 +12,15 @@ class Scrapper:
     # self.grid.append([])
     self.grid[0].append("Players Names")
     self.grid[0].append("Draft Kings")
+    self.grid[0].append("Caesars")
     # self.grid[0].append("BetMGM")
+
+  # A helper method to find the index of a certain value in a list
+  def index_of(self, val, in_list):
+    try:
+        return in_list.index(val)
+    except ValueError:
+        return -1 
 
   #TODO THIS IS MORE OF A TESTER IF ANYTHING (STILL WORKS)
   # Grabs the odds using the OddsShard website (MMA ODDS)
@@ -124,9 +134,6 @@ class Scrapper:
         name_array2.pop(n-count)
         count+=1
 
-
-
-
     # Adding First fighter to Odds
     i=0
     for array in odds_top_list:
@@ -171,98 +178,7 @@ class Scrapper:
     print(ufc.anyArbitrage(main_grid))
     return ufc.anyArbitrage(main_grid)
 
-  #   #TODO Scrap more sites (scrape the individual sites differently)
-  #   # DraftKings Tennis (Madrid)
-  # def draftKingsTennis(self):
-  #   chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
-  #                                         # and if it doesn't exist, download it automatically,
-  #                                         # then add chromedriver to path
-  #   driver = webdriver.Chrome()
-
-  #   website = ""
-  #   # Website might need a changed name
-  #   website = "https://sportsbook.draftkings.com/leagues/tennis/88671810"
-  #   driver.get(website)
-
-  #   # Name of team/player
-  #   names = driver.find_elements_by_xpath('//div[@class="sportsbook-outcome-body-wrapper"]/div/span')
-  #   nameArr = []
-  #   for name in names:
-  #     nameArr.append(name.text)
-
-  #   # Odds of team/player
-  #   odds = driver.find_elements_by_xpath('//div[@class="sportsbook-outcome-body-wrapper"]/div/div/span')
-  #   oddsArr = []
-  #   for odd in odds:
-  #     oddsArr.append(odd.text)
-
-  #   # Checks if the name is in the grid and if it's not, add it along with odds.
-  #   for i in range(len(nameArr)):
-  #     # Checks if the name is in the not in the grid and adds the odds.
-  #     if(not any(nameArr[i] in sublist for sublist in self.grid)):
-  #       self.grid.append([])
-  #       self.grid[len(self.grid)-1].append(nameArr[i])
-  #       self.grid[len(self.grid)-1].append(oddsArr[i])
-  #     else:
-  #       # Adds the odds to the given player array if the player exsists on that array
-  #       self.grid[self.grid.get_indexer([nameArr[i]])].append(oddsArr[i])
-  #   print(self.grid)
-  #   driver.close()
-
-  # # BETMGM Tennis (Madrid)
-  # #TODO SKIP THIS
-  # def betMGMTennis(self):
-  #   chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
-  #                                         # and if it doesn't exist, download it automatically,
-  #                                         # then add chromedriver to path
-  #   driver = webdriver.Chrome()
-
-  #   website = ""
-  #   # Website might need a changed name
-  #   website = "https://sports.co.betmgm.com/en/sports/tennis-5/betting/atp-6/atp-masters-madrid-esp-clay-17960"
-  #   driver.get(website)
-
-  #   # Name of team/player
-  #   names = driver.find_elements_by_xpath('//div[@class="participant"]')
-  #   nameArr = []
-  #   #TODO trim the the letters in the back of each name
-  #   for name in names:
-  #     nameArr.append(name.text[:-3])
-  #   nameArr.pop(len(nameArr)-1)
-  #   print(nameArr)
-
-  #   #TODO Odds are not scrapping correctly
-  #   # Odds of team/player
-  #   odds = driver.find_elements_by_xpath('//div[@class="option option-value ng-star-inserted"]')
-  #   oddsArr = []
-  #   for odd in odds:
-  #     oddsArr.append(odd.text)
-
-  #   print(oddsArr)
-
-  #   print(self.grid)
-  #   #TODO needs to be altered
-  #   # Checks if the name is in the grid and if it's not, add it along with odds.
-  #   for i in range(len(nameArr)):
-  #     # Checks if the name is in the not in the grid and adds the odds.
-  #     if(not any(nameArr[i] in sublist for sublist in self.grid)):
-  #       self.grid.append([])
-  #       self.grid[len(self.grid)-1].append(nameArr[i])
-  #       # Adds a none because Draft kings doesn't have a list if this is checked
-  #       self.grid[len(self.grid)-1].append('')
-  #       self.grid[len(self.grid)-1].append(oddsArr[i])
-  #     else:
-  #       # Adds the odds to the given player array if the player exsists on that array
-  #       # self.grid[self.grid.index([nameArr[i]])].append(oddsArr[i])
-
-  #       # print(self.grid[1][0] == nameArr[i])
-  #       # print(self.grid.index(nameArr[i]))
-  #       # self.grid[self.grid.index(nameArr[i])].append('fuck')
-  #       self.grid[i].append('fuck')
-  #   driver.close()
-
-  #   print("mogus----------")
-  #   print(self.grid)
+    #TODO Scrap more sites (scrape the individual sites differently)
 
   def draftKingsMMA(self):
     chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
@@ -296,6 +212,74 @@ class Scrapper:
         self.grid[len(self.grid)-1].append(oddsArr[i])
       else:
         # Adds the odds to the given player array if the player exsists on that array
-        self.grid[self.grid.get_indexer([nameArr[i]])].append(oddsArr[i])
-    print(self.grid)
+        for j in range(len(self.grid)):
+          if(self.index_of(nameArr[i], self.grid[j]) != -1):
+            self.grid[j].append(oddsArr[i])
+    # adds '' to names which are not touched by this method
+    for i in range(len(self.grid)):
+      if(len(self.grid[i]) < 2):
+        self.grid[i].append('');
+    # print(self.grid)
     driver.close()
+  
+  def CaesarsMMA(self):
+    chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
+                                          # and if it doesn't exist, download it automatically,
+                                          # then add chromedriver to path
+    driver = webdriver.Chrome()
+
+    website = ""
+    # Website might need a changed name
+    website = "https://www.williamhill.com/us/co/bet/ufcmma"
+    driver.get(website)
+
+    # Name of team/player
+    names = driver.find_elements_by_xpath('//div[@class="teamLabel maxIOSHeight"]/span')
+    nameArr = []
+    #TODO not gathering all names
+    for name in names:
+      nameArr.append(name.text)
+    # print(nameArr)
+
+    #TODO not gathering all odds
+    # Odds of team/player
+    odds = driver.find_elements_by_xpath('//div[@class="oddsView"]/div')
+    oddsArr = []
+    count = 0
+    for odd in odds:
+      # print(odd.text)
+      if (count > 1):
+        oddsArr.append(odd.text)
+      count+=1
+
+    # print(oddsArr)
+
+    # print(self.grid)
+    # Checks if the name is in the grid and if it's not, add it along with odds.
+    for i in range(len(nameArr)):
+      # Checks if the name is in the not in the grid and adds the odds.
+      if(not any(nameArr[i] in sublist for sublist in self.grid)):
+        #TODO this could be wrong
+        self.grid.append([])
+        self.grid[len(self.grid)-1].append(nameArr[i])
+        # Adds a none because Draft kings doesn't have a list if this is checked
+        self.grid[len(self.grid)-1].append('')
+        self.grid[len(self.grid)-1].append(oddsArr[i])
+      else:
+        # Adds the odds to the given player array if the player exsists on that array
+        for j in range(len(self.grid)):
+          if(self.index_of(nameArr[i], self.grid[j]) != -1):
+            self.grid[j].append(oddsArr[i])
+    # adds '' to names which are not touched by this method
+    for i in range(len(self.grid)):
+      # if(len(self.grid[i]) < len(self.grid[0])):
+      if(len(self.grid[i]) < 3):
+        self.grid[i].append('');
+
+    # print(self.grid)
+    driver.close()
+
+  def arbitrage(self):
+    ufc = Calculations(self.grid)
+    ufc.print()
+    print(ufc.anyArbitrage(self.grid))
