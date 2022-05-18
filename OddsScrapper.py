@@ -15,6 +15,33 @@ class Scrapper:
     self.grid[0].append("Caesars")
     # self.grid[0].append("BetMGM")
 
+  # data to test the calculations class
+  def testData1(self):
+    # {{"Names", "Odds"} {"Heads", '+150'} {"Tails", '+150'}}
+    self.grid = [[]]
+    self.grid[0].append("Names")
+    self.grid[0].append("Odds")
+    self.grid.append([])
+    self.grid[1].append("Heads")
+    self.grid[1].append("+150")
+    self.grid.append([])
+    self.grid[2].append("Tails")
+    self.grid[2].append("+150")
+
+  def testData2(self):
+    self.grid = [[]]
+    self.grid[0].append("Names")
+    self.grid[0].append("Odds")
+    self.grid[0].append("Other Odds")
+    self.grid.append([])
+    self.grid[1].append("Heads")
+    self.grid[1].append("+150")
+    self.grid[1].append("-100")
+    self.grid.append([])
+    self.grid[2].append("Tails")
+    self.grid[2].append("-100")
+    self.grid[2].append("+150")
+
   # A helper method to find the index of a certain value in a list
   def index_of(self, val, in_list):
     try:

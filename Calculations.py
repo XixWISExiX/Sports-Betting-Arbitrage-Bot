@@ -5,11 +5,26 @@
 class Calculations:
   def __init__(self, grid) -> None:
     self.grid = grid
+
+    self.site1 = None
+    self.team1 = None
+    self.betOdds1 = None
+
+    self.team2 = None
+    self.bet2 = None
+    self.betOdds2 = None
+
     self.index1 = None
     self.index2 = None
 
   def print(self):
     print(self.grid)
+
+  def printAll(self):
+    print("-----")
+    print("Site 1: ",self.site1, "| Team Name: ",self.team1, "| Odds: ",self.betOdds1)
+    print("Site 2: ",self.site2, "| Team Name: ",self.team2, "| Odds: ",self.betOdds2)
+    print("-----")
 
   def toDecimal(self, american_odds):
     if(american_odds<0):
@@ -27,6 +42,9 @@ class Calculations:
     impProb = self.impliedProbability(odds1, odds2)
     # print(impProb)
     if(impProb < 1):
+      self.betOdds1 = odds1
+      self.betOdds2 = odds2
+      self.printAll()
       return True
     return False
 
@@ -44,7 +62,14 @@ class Calculations:
             matchSet[1].append(int(grids[r+1][c]))
           # print("Row is ",r)
           # print("Col is ",c)
+
+        # self.site1 = grids[0][r]
+        # self.site2 = grids[0][r]
+        # self.team1 = grids[r][0]
+        # self.team2 = grids[r+1][0]
       if(self.bestChance(matchSet)):
+        #TODO find which sites and which matches
+        # print(matchSet)
         return True
       r+=2
     return False
@@ -65,7 +90,16 @@ class Calculations:
         self.index2 = i+1
     # print(large1)
     # print(large2)
+    # print(self.index1)
     # print(self.index2)
-    self.isArbitrage(large1,large2)
+
+    self.site1 = self.grid[0][self.index1]
+    self.site2 = self.grid[0][self.index2]
+    self.team1 = self.grid[self.index1][0]
+    self.team2 = self.grid[self.index2][0]
+
+    return self.isArbitrage(large1,large2)
 
 #TODO Find out how much money should be put down (or at least a ratio if arbitrage)
+  def moneyRatio(self):
+    return;
