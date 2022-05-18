@@ -14,7 +14,10 @@
 from OddsScrapper import Scrapper
 
 s = Scrapper()
+#TODO oddsShard has bugs
 # s.oddsSharkUFC()
-s.draftKingsTennis()
+s.draftKingsMMA()
+# s.draftKingsTennis()
 # s.betMGMTennis()
+
 #TODO might need to check if the same 2 teams are having a match on a different day (could be a future bug)
