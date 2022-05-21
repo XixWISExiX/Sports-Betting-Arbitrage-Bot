@@ -2,17 +2,19 @@ from OddsScrapper import Scrapper
 
 s = Scrapper()
 # oddsShard has bugs
-# s.oddsSharkUFC()
+s.oddsSharkUFC()
 
 # s.draftKingsMMA()
 # s.CaesarsMMA()
-s.FanduelMMA()
-s.printData()
+
+# s.FanduelMMA()
+# s.printData()
+
 # s.arbitrage()
 
 # s.testData1()
 # s.testData2()
-# s.arbitrage()
+s.arbitrage()
 
 #TODO need to make test data for a calculations method which would be able to tell you how much money you should put down or the ratio which you should put down
 
