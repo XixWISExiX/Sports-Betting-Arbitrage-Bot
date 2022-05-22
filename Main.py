@@ -6,6 +6,7 @@ from OddsScrapper import Scraper
 s = Scraper()
 # TODO find all arbitrage, not just one, and make sure that it is not repeated 
 # TODO if odds are heavaly scewed, then there might be something wrong
+
 # s.oddsSharkMMA()
 # s.arbitrage()
 # s.clearData()
@@ -14,6 +15,12 @@ s = Scraper()
 # s.arbitrage()
 # s.clearData()
 
-s.oddsSharNBA()
-s.arbitrage() 
+# s.oddsSharkNBA()
+# s.arbitrage()
+# s.clearData()
+
+s.oddsSharkMLB()
+s.arbitrage()
+s.clearData()
+
 #TODO might need to check if the same 2 teams are having a match on a different day (could be a future bug)
