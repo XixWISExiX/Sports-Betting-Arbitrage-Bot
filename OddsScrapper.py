@@ -8,7 +8,7 @@ import chromedriver_autoinstaller
 
 # Scrapper object which makes a grid to hold the name of the players and the odds of the given matches with their
 # corrisponding sports books
-class Scrapper:
+class Scraper:
   def __init__(self):
     self.grid = [[]]
     # self.grid.append([])
@@ -16,10 +16,6 @@ class Scrapper:
     # self.grid[0].append("Draft Kings")
     # self.grid[0].append("Caesars")
     # self.grid[0].append("Fanduel")
-    chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
-                                          # and if it doesn't exist, download it automatically,
-                                          # then add chromedriver to path
-    self.driver = webdriver.Chrome()
 
   # prints out the grid
   def printData(self):
@@ -82,7 +78,7 @@ class Scrapper:
     # website = "https://www.oddsshark.com/nhl/odds"
     driver.get(website)
 
-    # adds different betting cites
+    # adds different betting cites to the first array
     books = driver.find_elements_by_xpath('//div[@class="op-block__books"]/div/a')
     betting_sites = []
     betting_sites.append("Opening Odds")
@@ -94,11 +90,8 @@ class Scrapper:
           betting_sites.append(book.get_attribute("aria-label"))
         else:
           count1+=1
-    # print(betting_sites)
 
-
-
-    # Getting the UFC Fighters names
+    # gets the match participants names
     names = driver.find_elements_by_xpath('//div[@class="op-block__matchup-team-wrapper"]/div/a/span')
     name_array = []
     name_array2 = []
@@ -110,20 +103,16 @@ class Scrapper:
         if(counter % 2 == 0):
           name1 = name.text
           name_array.append(name1)
-          # print(name1)
           counter+=1
         else:
           name2 = name.text
           name_array2.append(name2)
-          # print(name2)
           counter+=1
         count+=1
       else:
         count-=1
 
-
-
-    # Getting the UFC odds from each site and removes opening odds
+    # Getting the odds from each site and removes opening odds
     odds_top = driver.find_elements_by_xpath('//div[@class="op-block__cell-first-row"]/div')
     odds_top_list = [[]]
     counter = 0
@@ -132,14 +121,13 @@ class Scrapper:
       if(count == 0):
         tops = top.text
         odds_top_list[c].append(tops)
-        # print(tops)
         count+=1
         counter+=1
         if(counter == len(betting_sites)):
           counter=0
           odds_top_list[c].pop(0)
           odds_top_list.append([])
-          openingNum = 0
+          # openingNum = 0
           c+=1
       else:
         count-=1
@@ -152,7 +140,6 @@ class Scrapper:
       if(count == 0):
         bots = bot.text
         odds_bottom_list[c].append(bots)
-        # print(bots)
         count+=1
         counter+=1
         if(counter == len(betting_sites)):
@@ -163,18 +150,16 @@ class Scrapper:
       else:
         count-=1
 
-    # Finding all the nulls
+    # Finding all the null locations (there are participants with 0 odds listed)
     nullls = driver.find_elements_by_xpath('//div[@class="op-block__separator odds-block__separator--right"]/following-sibling::div')
     null_indecies = []
     counter = 0
     for nul in nullls:
       if(nul.get_attribute("class") == "op-block__row not-futures no-odds-wrapper"):
         null_indecies.append(math.floor(counter/2))
-        # null_indecies.append(counter/2)
       if(counter == len(odds_bottom_list)*2):
         break
       counter+=1
-    # print(null_indecies)
 
     # Quits the website
     driver.quit()
@@ -186,20 +171,18 @@ class Scrapper:
         name_array2.pop(n-count)
         count+=1
 
-    # Adding First fighter to Odds
+    # Adding First participant to Odds
     i=0
     for array in odds_top_list:
       array.insert(0, name_array[i])
-      # print(name_array[i])
       i+=1
-    # Adding Second fighter to Odds
+    # Adding Second participant to Odds
     i=0
     for array in odds_bottom_list:
       array.insert(0, name_array2[i])
-      # print(name_array2[i])
       i+=1
 
-    # Combining both fighters and odds
+    # Combining both participant and odds
     main_grid = [[]]
     i=0
     a=0
@@ -220,21 +203,20 @@ class Scrapper:
 
     betting_sites.insert(0, "Fighter Names")
     betting_sites.pop(1)
-    # print(betting_sites)
     main_grid.insert(0, betting_sites)
-    # All values are now stored in a 2d array called main grid
-
-    # print(main_grid)
-
+    # All values are now stored in a 2d array called main grid which will be assigned to the grid variable
     self.grid = main_grid
 
-    # ufc = Calculations(main_grid)
-    # ufc.print()
-    # print(ufc.anyArbitrage(main_grid))
-    # return ufc.anyArbitrage(main_grid)
+#TODO Scrap more sites (scrape the individual sites differently)
 
-    #TODO Scrap more sites (scrape the individual sites differently)
 
+
+
+
+
+
+#------------------------------------------------------------------------------------------
+#TODO EVERYTHING PAST THIS POINT IS EXPIRIMENTAL AND DOESN'T WORK AS INTENDED
   def draftKingsMMA(self):
     chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
                                           # and if it doesn't exist, download it automatically,
@@ -329,138 +311,6 @@ class Scrapper:
 
     # print(self.grid)
     driver.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-  # def FanduelMMA(self):
-  #   chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
-  #                                         # and if it doesn't exist, download it automatically,
-  #                                         # then add chromedriver to path
-  #   driver = webdriver.Chrome()
-
-  #   website = "https://pa.betrivers.com/?page=sportsbook&l=RiversPittsburgh&group=1000093883&type=prematch#home"
-  #   driver.get(website)
-
-  #   # Name of team/player
-  #   # names = driver.find_elements_by_xpath('//span[@class="ae aj iu iv iw ix ij ik il io iy s gd dw iz h i j ak l m al o am q an br"]')
-  #   names = driver.find_elements_by_xpath('//div[@class="participant"]//span')
-  #   nameArr = []
-  #   for name in names:
-  #     nam = name.text
-  #     print(nam)
-  #     fname = nam[nam.index(' ')+1:len(nam)]
-  #     lname = nam[0:nam.index(', ')]
-  #     tname = fname + ' ' + lname
-  #     print(tname)
-  #     nameArr.append(tname)
-
-  #   # Odds of team/player
-  #   odds = driver.find_elements_by_xpath('//li[@class="outcome-value"]')
-  #   oddsArr = []
-  #   for odd in odds:
-  #     print(odd.text)
-  #     oddsArr.append(odd.text)
-
-  #   # Checks if the name is in the grid and if it's not, add it along with odds.
-  #   for i in range(len(nameArr)):
-  #     # Checks if the name is in the not in the grid and adds the odds.
-  #     if(not any(nameArr[i] in sublist for sublist in self.grid)):
-  #       self.grid.append([])
-  #       self.grid[len(self.grid)-1].append(nameArr[i])
-  #       self.grid[len(self.grid)-1].append(oddsArr[i])
-  #     else:
-  #       # Adds the odds to the given player array if the player exsists on that array
-  #       for j in range(len(self.grid)):
-  #         if(self.index_of(nameArr[i], self.grid[j]) != -1):
-  #           self.grid[j].append(oddsArr[i])
-  #   # adds '' to names which are not touched by this method
-  #   for i in range(len(self.grid)):
-  #     # The integer number should change with the position which the code is being declaired
-  #     if(len(self.grid[i]) < 4):
-  #       self.grid[i].append('');
-  #       # self.grid[i].append('');
-  #   # print(self.grid)
-  #   driver.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  # def FanduelMMA(self):
-  #   chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
-  #                                         # and if it doesn't exist, download it automatically,
-  #                                         # then add chromedriver to path
-  #   driver = webdriver.Chrome()
-
-  #   website = "https://www.unibet.com/betting/sports/filter/ufc_mma/all/matches"
-  #   driver.get(website)
-
-  #   # Name of team/player
-  #   # names = driver.find_elements_by_xpath('//span[@class="ae aj iu iv iw ix ij ik il io iy s gd dw iz h i j ak l m al o am q an br"]')
-  #   names = driver.find_elements_by_xpath('//div[@class="c539a"]')
-  #   nameArr = []
-  #   count = 0
-  #   for name in names:
-  #     if (count > 12):
-  #       nam = name.text
-  #       print(nam)
-  #       fname = nam[nam.index(' ')+1:len(nam)]
-  #       lname = nam[0:nam.index(', ')]
-  #       tname = fname + ' ' + lname
-  #       print(tname)
-  #       nameArr.append(tname)
-  #     count+=1
-
-  #   # Odds of team/player
-  #   odds = driver.find_elements_by_xpath('//span[@class="_8e013"]')
-  #   oddsArr = []
-  #   count = 0
-  #   for odd in odds:
-  #     if (count > 12):
-  #       print(odd.text)
-  #       oddsArr.append(odd.text)
-
-  #   # Checks if the name is in the grid and if it's not, add it along with odds.
-  #   for i in range(len(nameArr)):
-  #     # Checks if the name is in the not in the grid and adds the odds.
-  #     if(not any(nameArr[i] in sublist for sublist in self.grid)):
-  #       self.grid.append([])
-  #       self.grid[len(self.grid)-1].append(nameArr[i])
-  #       self.grid[len(self.grid)-1].append(oddsArr[i])
-  #     else:
-  #       # Adds the odds to the given player array if the player exsists on that array
-  #       for j in range(len(self.grid)):
-  #         if(self.index_of(nameArr[i], self.grid[j]) != -1):
-  #           self.grid[j].append(oddsArr[i])
-  #   # adds '' to names which are not touched by this method
-  #   for i in range(len(self.grid)):
-  #     # The integer number should change with the position which the code is being declaired
-  #     if(len(self.grid[i]) < 4):
-  #       self.grid[i].append('');
-  #       # self.grid[i].append('');
-  #   # print(self.grid)
-  #   driver.close()
-
 
   def FanduelMMA(self):
     # chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
