@@ -58,6 +58,7 @@ class Calculations:
       self.team1 = self.grid[self.index][0]
       self.team2 = self.grid[self.index+1][0]
       print("======")
+      print("Implied Probability is", impProb)
       self.printAll()
       #TODO might want to grab multiple arbitrage oportunities if you can (program doesn't do that yet)
       # assumed pay out is $100
@@ -125,12 +126,12 @@ class Calculations:
     stake2 = (payout)/odd2
 
     # Determins the ratio to stake on both sides of the bet
-    ratio1 = (payout)/stake1
-    ratio2 = (payout)/stake2
+    ratio1 = stake1/stake2
+    ratio2 = stake2/stake1
 
     #TODO double cheek of ratio works as intended
     # Prints the information to the user
-    print("Bet $", stake1, " on ", self.team1, " to win $", payout - stake1, " profit. Ratio 1 is", ratio1)
-    print("Bet $", stake2, " on ", self.team2, " to win $", payout - stake2, " profit. Ratio 2 is", ratio2)
+    print("Bet $%f" %stake1, "on", self.team1, "to win $%f" %(payout - stake1), "profit. Bet 1 needs", ratio1, "times more than Bet 2.")
+    print("Bet $%f" %stake2, "on", self.team2, "to win $%f" %(payout - stake2), "profit. Bet 2 needs", ratio2, "times more than Bet 1.")
     print("Net profit is $", payout-stake1-stake2)
     print("======")
