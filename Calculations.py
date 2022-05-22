@@ -1,72 +1,78 @@
-
-# Imports the main grid variable from odds Scrapper (MORE VARIABLES WILL BE MADE WITH MORE SCRAPES)
-
-# Grab the index to the corisponding bookies
-#TODO might want to grab multiple arbitrage oportunities if you can (program doesn't do that yet)
+# Imports the main grid variable from odds Scrapper (calculates arbitrage with the format given from the scrapper class)
+# Only calculates arbitrage for 2 possible out comes, meaning no parlays and no draw odds.
 class Calculations:
   def __init__(self, grid) -> None:
+    # The grid to preform calculations on
     self.grid = grid
 
+    # Name of arbitrage site 1 and 2
     self.site1 = None
-    self.team1 = None
-    self.betOdds1 = None
+    self.site2 = None
 
+    # Name of arbitrage players 1 and 2
+    self.team1 = None
     self.team2 = None
-    self.bet2 = None
+
+    # odds of bet 1 and bet 2
+    self.betOdds1 = None
     self.betOdds2 = None
 
+    # index position of player 1
     self.index = None
+    # index position of site 1
     self.index1 = None
+    # index position of site 2
     self.index2 = None
 
+  # Prints the grid
   def print(self):
     print(self.grid)
 
+  # Prints the Arbitrage site, name, and odds of both sides of the given match
   def printAll(self):
     print("-----")
-    # print(self.index1)
-    # print(self.index2)
     print("Site 1: ",self.site1, "| Team Name: ",self.team1, "| Odds: ",self.betOdds1)
     print("Site 2: ",self.site2, "| Team Name: ",self.team2, "| Odds: ",self.betOdds2)
     print("-----")
 
+  # Converts american odds to decimal odds
   def toDecimal(self, american_odds):
     if(american_odds<0):
       return (100/abs(american_odds))+1
     else:
       return (american_odds/100)+1
 
-  # Converts numbers to implied probability that is less than 100%
+  # Converts both odds to implied probability (arbitrage is less than 100% or 1)
   def impliedProbability(self, odds1, odds2):
     return (1/self.toDecimal(odds1))+(1/self.toDecimal(odds2))
 
 
-  #TODO If isArbitrage returns true, then this should email the user the match and the sites
+  # Determins if 2 odds have Arbitrage and if so, returns true. This method also prints out arbitrage information to the user
   def isArbitrage(self, odds1, odds2):
     impProb = self.impliedProbability(odds1, odds2)
-    # print(impProb)
     if(impProb < 1):
       self.betOdds1 = odds1
       self.betOdds2 = odds2
       self.site1 = self.grid[0][self.index1]
       self.site2 = self.grid[0][self.index2]
-      #TODO find the index of the given players
       self.team1 = self.grid[self.index][0]
-      # self.team1 = self.grid[self.grid[].index(self.index1)][0]
       self.team2 = self.grid[self.index+1][0]
       print("======")
       self.printAll()
+      #TODO might want to grab multiple arbitrage oportunities if you can (program doesn't do that yet)
       # assumed pay out is $100
       self.moneyRatio(odds1, odds2, 100)
       return True
     return False
 
+  # Finds if there is arbitrage in the grid
   def anyArbitrage(self, grids):
-    # All values in the grid should be the same length so just use 0
     r=1
     while(r<len(self.grid)):
+      # MatchSet is a 2d array with 2 different arrays holding the odds from both sides of a match
       matchSet = [[]]
       matchSet.append([])
+      # Adds None in the space for the playername
       matchSet[0].append(None)
       matchSet[1].append(None)
       for c in range(len(self.grid[0])):
@@ -75,19 +81,13 @@ class Calculations:
           if(grids[r][c] != '' and grids[r+1][c] != ''):
             matchSet[0].append(int(grids[r][c]))
             matchSet[1].append(int(grids[r+1][c]))
-          # print("Row is ",r)
-          # print("Col is ",c)
-
-        # self.site1 = grids[0][r]
-        # self.site2 = grids[0][r]
-        # self.team1 = grids[r][0]
-        # self.team2 = grids[r+1][0]
           else:
+            # Adds None in the space for the values which don't exist
             matchSet[0].append(None)
             matchSet[1].append(None)
       self.index = r
+      # Uses the newly made MatchSet to then find the best chance of arbitrage
       if(self.bestChance(matchSet)):
-        # print(matchSet)
         return True
       r+=2
     return False
@@ -95,36 +95,42 @@ class Calculations:
 # Finds the largest element from both arrays in the 2d array and checks if it is an arbitrage or not
 # Also stores the index of the highest value to trace back to the right Bookie
   def bestChance(self, matchSet):
-    # print(matchSet)
+    # Finds the largest value for the first set
     large1 = -100000
     for i in range(len(matchSet[0])):
       if(matchSet[0][i] != None):
         if(matchSet[0][i]>large1):
           large1 = matchSet[0][i]
           self.index1 = i
+    # Finds the largest value for the second set
     large2 = -100000
-    print("Length of match set",len(matchSet[1]))
     for i in range(len(matchSet[1])):
       if(matchSet[1][i] != None):
         if(matchSet[1][i]>large2):
           large2 = matchSet[1][i]
           self.index2 = i
-    # print(large1)
-    # print(large2)
-    # print(self.index1)
-    # print(self.index2)
-
+    # Calls the is arbitrage function to see if the two largest numbers are arbitrage
     return self.isArbitrage(large1,large2)
 
-#TODO Find out how much money should be put down (or at least a ratio if arbitrage)
+  # Finds out how much money should be put down (with the assuming price of total money put down) along with the ratio (if arbitrage)
   def moneyRatio(self, odds1, odds2, payout):
-    #https://thearbacademy.com/arbitrage-calculation/ this website might help
+    #TODO https://thearbacademy.com/arbitrage-calculation/ this website might help
+
+    # Gets decimal odds to perform calcultions
     odd1 = self.toDecimal(odds1)
     odd2 = self.toDecimal(odds2)
 
+    # Determins how much money to stake on both sides of the bet
     stake1 = (payout)/odd1
     stake2 = (payout)/odd2
-    print("Bet $", stake1, " on ", self.team1, " to win $", payout - stake1, " profit")
-    print("Bet $", stake2, " on ", self.team2, " to win $", payout - stake2, " profit")
+
+    # Determins the ratio to stake on both sides of the bet
+    ratio1 = (payout)/stake1
+    ratio2 = (payout)/stake2
+
+    #TODO double cheek of ratio works as intended
+    # Prints the information to the user
+    print("Bet $", stake1, " on ", self.team1, " to win $", payout - stake1, " profit. Ratio 1 is", ratio1)
+    print("Bet $", stake2, " on ", self.team2, " to win $", payout - stake2, " profit. Ratio 2 is", ratio2)
     print("Net profit is $", payout-stake1-stake2)
     print("======")

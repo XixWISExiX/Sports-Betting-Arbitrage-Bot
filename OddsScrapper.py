@@ -6,26 +6,31 @@ from Calculations import Calculations
 from selenium import webdriver
 import chromedriver_autoinstaller
 
+# Scrapper object which makes a grid to hold the name of the players and the odds of the given matches with their
+# corrisponding sports books
 class Scrapper:
   def __init__(self):
     self.grid = [[]]
     # self.grid.append([])
-    self.grid[0].append("Players Names")
-    self.grid[0].append("Draft Kings")
-    self.grid[0].append("Caesars")
-    self.grid[0].append("Fanduel")
+    # self.grid[0].append("Players Names")
+    # self.grid[0].append("Draft Kings")
+    # self.grid[0].append("Caesars")
+    # self.grid[0].append("Fanduel")
     chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
                                           # and if it doesn't exist, download it automatically,
                                           # then add chromedriver to path
     self.driver = webdriver.Chrome()
-    # self.grid[0].append("BetMGM")
 
+  # prints out the grid
   def printData(self):
     print(self.grid)
 
-  # data to test the calculations class
+  #clears the content of the grid
+  def clearData(self):
+    self.grid = [[]]
+
+  # data1 to test the calculations class
   def testData1(self):
-    # {{"Names", "Odds"} {"Heads", '+150'} {"Tails", '+150'}}
     self.grid = [[]]
     self.grid[0].append("Names")
     self.grid[0].append("Odds")
@@ -36,6 +41,7 @@ class Scrapper:
     self.grid[2].append("Tails")
     self.grid[2].append("+150")
 
+  # data2 to test the calculations class
   def testData2(self):
     self.grid = [[]]
     self.grid[0].append("Names")
@@ -50,21 +56,23 @@ class Scrapper:
     self.grid[2].append("-100")
     self.grid[2].append("+150")
 
-  # A helper method to find the index of a certain value in a list
+  # A helper method to find the index of a certain value in a list and if the value is not in the index
+  # the method returns -1
   def index_of(self, val, in_list):
     try:
         return in_list.index(val)
     except ValueError:
         return -1 
 
+  # Finds if there is arbitrage in the grid
   def arbitrage(self):
     calc = Calculations(self.grid)
     calc.print()
+    #TODO if true send an email to the user
     print(calc.anyArbitrage(self.grid))
 
-  #TODO THIS IS MORE OF A TESTER IF ANYTHING (STILL WORKS)
   # Grabs the odds using the OddsShard website (MMA ODDS)
-  def oddsSharkUFC(self):
+  def oddsSharkMMA(self):
     chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
                                           # and if it doesn't exist, download it automatically,
                                           # then add chromedriver to path
