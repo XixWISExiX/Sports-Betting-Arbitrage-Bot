@@ -188,4 +188,5 @@ class Calculations:
     self.emailMessage+="Bet ${} on {} to win ${} profit. Bet 1 needs {} times more than Bet 2.\n".format(stake1, self.team1, (payout - stake1), ratio1)
     self.emailMessage+="Bet ${} on {} to win ${} profit. Bet 2 needs {} times more than Bet 2.\n".format(stake2, self.team2, (payout - stake2), ratio2)
     self.emailMessage+="Net profit is ${}\n".format(payout-stake1-stake2)
+    self.emailMessage+="DISCLAIMER, if odds are heavily scewed there might be an error with the sites scraped.\n"
     self.emailMessage+="======\n"
