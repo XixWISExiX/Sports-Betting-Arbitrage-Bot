@@ -50,25 +50,27 @@ class Calculations:
 
   # Prints the Arbitrage site, name, and odds of both sides of the given match
   def teamComparison(self):
-    # print("-----")
-    # print("Sport :",self.sportName)
-    # print("Site 1: ",self.site1, "| Team Name: ",self.team1, "| Odds: ",self.betOdds1)
-    # print("Site 2: ",self.site2, "| Team Name: ",self.team2, "| Odds: ",self.betOdds2)
-    # print("-----")
-    self.emailMessage+="======\n"
-    self.emailMessage+="Implied Probability: {}\n".format(self.impProb)
-    self.emailMessage+="-----\n"
-    self.emailMessage+="Sport : {}\n".format(self.sportName)
-    self.emailMessage+="Site 1: {} | Team Name: {} | Odds: {}\n".format(self.site1, self.team1, self.betOdds1)
-    self.emailMessage+="Site 2: {} | Team Name: {} | Odds: {}\n".format(self.site2, self.team2, self.betOdds2)
-    self.emailMessage+="-----\n"
+    print("======")
+    print("Implied Probability: ",self.impProb)
+    print("-----")
+    print("Sport :",self.sportName)
+    print("Site 1: ",self.site1, "| Team Name: ",self.team1, "| Odds: ",self.betOdds1)
+    print("Site 2: ",self.site2, "| Team Name: ",self.team2, "| Odds: ",self.betOdds2)
+    print("-----")
+    # self.emailMessage+="======\n"
+    # self.emailMessage+="Implied Probability: {}\n".format(self.impProb)
+    # self.emailMessage+="-----\n"
+    # self.emailMessage+="Sport : {}\n".format(self.sportName)
+    # self.emailMessage+="Site 1: {} | Team Name: {} | Odds: {}\n".format(self.site1, self.team1, self.betOdds1)
+    # self.emailMessage+="Site 2: {} | Team Name: {} | Odds: {}\n".format(self.site2, self.team2, self.betOdds2)
+    # self.emailMessage+="-----\n"
 
   def emailUser(self):
     server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
-    server.login("WiseBetz100@gmail.com", "Fr33M0n3y.")
-    server.sendmail("WiseBetz100@gmail.com",
-                    "ReceiverOfGoodNews@gmail.com",
-                    self.emailMessage)
+    # server.login("WiseBetz100@gmail.com", "Fr33M0n3y.")
+    # server.sendmail("WiseBetz100@gmail.com",
+    #                 "ReceiverOfGoodNews@gmail.com",
+    #                 self.emailMessage)
     server.quit()
 
   # Converts american odds to decimal odds
@@ -102,12 +104,12 @@ class Calculations:
       # assumed pay out is $100
       self.moneyRatio(odds1, odds2, 100)
 
-      for array in self.emailMsgArray:
-        if(array == self.emailMessage):
-          wasEmailed = True
-      if(not wasEmailed):
-        self.emailUser()
-        self.emailMsgArray.append(self.emailMessage)
+      # for array in self.emailMsgArray:
+      #   if(array == self.emailMessage):
+      #     wasEmailed = True
+      # if(not wasEmailed):
+      #   self.emailUser()
+      #   self.emailMsgArray.append(self.emailMessage)
 
       return True
     return False
@@ -180,12 +182,12 @@ class Calculations:
     #TODO double cheek of ratio works as intended
     # Prints the information to the user
 
-    # print("Bet $%f" %stake1, "on", self.team1, "to win $%f" %(payout - stake1), "profit. Bet 1 needs", ratio1, "times more than Bet 2.")
-    # print("Bet $%f" %stake2, "on", self.team2, "to win $%f" %(payout - stake2), "profit. Bet 2 needs", ratio2, "times more than Bet 1.")
-    # print("Net profit is $", payout-stake1-stake2)
-    # print("======")
+    print("Bet $%f" %stake1, "on", self.team1, "to win $%f" %(payout - stake1), "profit. Bet 1 needs", ratio1, "times more than Bet 2.")
+    print("Bet $%f" %stake2, "on", self.team2, "to win $%f" %(payout - stake2), "profit. Bet 2 needs", ratio2, "times more than Bet 1.")
+    print("Net profit is $", payout-stake1-stake2)
+    print("======")
 
-    self.emailMessage+="Bet ${} on {} to win ${} profit. Bet 1 needs {} times more than Bet 2.\n".format(stake1, self.team1, (payout - stake1), ratio1)
-    self.emailMessage+="Bet ${} on {} to win ${} profit. Bet 2 needs {} times more than Bet 2.\n".format(stake2, self.team2, (payout - stake2), ratio2)
-    self.emailMessage+="Net profit is ${}\n".format(payout-stake1-stake2)
-    self.emailMessage+="======\n"
+    # self.emailMessage+="Bet ${} on {} to win ${} profit. Bet 1 needs {} times more than Bet 2.\n".format(stake1, self.team1, (payout - stake1), ratio1)
+    # self.emailMessage+="Bet ${} on {} to win ${} profit. Bet 2 needs {} times more than Bet 2.\n".format(stake2, self.team2, (payout - stake2), ratio2)
+    # self.emailMessage+="Net profit is ${}\n".format(payout-stake1-stake2)
+    # self.emailMessage+="======\n"

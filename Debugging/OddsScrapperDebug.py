@@ -2,7 +2,7 @@ import math
 from unittest import skip
 
 import pandas as pd
-from Calculations import Calculations
+from CalculationsDebug import Calculations
 from selenium import webdriver
 import chromedriver_autoinstaller
 

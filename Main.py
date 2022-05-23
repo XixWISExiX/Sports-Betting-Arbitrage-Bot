@@ -4,22 +4,22 @@ from OddsScrapper import Scraper
 s = Scraper()
 # TODO if odds are heavaly scewed, then there might be something wrong
 i = 0
-
+msgArray = []
 while(i<2):
   s.oddsSharkMMA()
-  s.arbitrage()
+  msgArray = s.arbitrage(msgArray)
   s.clearData()
 
   s.oddsSharkNHL()
-  s.arbitrage()
+  msgArray = s.arbitrage(msgArray)
   s.clearData()
 
   s.oddsSharkNBA()
-  s.arbitrage()
+  msgArray = s.arbitrage(msgArray)
   s.clearData()
 
   s.oddsSharkMLB()
-  s.arbitrage()
+  msgArray = s.arbitrage(msgArray)
   s.clearData()
 
   i+=1
