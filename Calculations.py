@@ -1,9 +1,19 @@
+import smtplib
 # Imports the main grid variable from odds Scrapper (calculates arbitrage with the format given from the scrapper class)
 # Only calculates arbitrage for 2 possible out comes, meaning no parlays and no draw odds.
 class Calculations:
-  def __init__(self, grid) -> None:
+  def __init__(self, grid, sportName) -> None:
     # The grid to preform calculations on
     self.grid = grid
+
+    # Name of the given sport
+    self.sportName = sportName
+
+    # The email message which is going to be emailed when there is arbitrage
+    self.emailMessage = ""
+
+    # The Implied Probability
+    self.impProb = 101
 
     # Name of arbitrage site 1 and 2
     self.site1 = None
@@ -29,11 +39,27 @@ class Calculations:
     print(self.grid)
 
   # Prints the Arbitrage site, name, and odds of both sides of the given match
-  def printAll(self):
-    print("-----")
-    print("Site 1: ",self.site1, "| Team Name: ",self.team1, "| Odds: ",self.betOdds1)
-    print("Site 2: ",self.site2, "| Team Name: ",self.team2, "| Odds: ",self.betOdds2)
-    print("-----")
+  def teamComparison(self):
+    # print("-----")
+    # print("Sport :",self.sportName)
+    # print("Site 1: ",self.site1, "| Team Name: ",self.team1, "| Odds: ",self.betOdds1)
+    # print("Site 2: ",self.site2, "| Team Name: ",self.team2, "| Odds: ",self.betOdds2)
+    # print("-----")
+    self.emailMessage+="======\n"
+    self.emailMessage+="Implied Probability: {}\n".format(self.impProb)
+    self.emailMessage+="-----\n"
+    self.emailMessage+="Sport : {}\n".format(self.sportName)
+    self.emailMessage+="Site 1: {} | Team Name: {} | Odds: {}\n".format(self.site1, self.team1, self.betOdds1)
+    self.emailMessage+="Site 2: {} | Team Name: {} | Odds: {}\n".format(self.site2, self.team2, self.betOdds2)
+    self.emailMessage+="-----\n"
+
+  def emailUser(self):
+    server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+    server.login("WiseBetz100@gmail.com", "Fr33M0n3y.")
+    server.sendmail("WiseBetz100@gmail.com",
+                    "ReceiverOfGoodNews@gmail.com",
+                    self.emailMessage)
+    server.quit()
 
   # Converts american odds to decimal odds
   def toDecimal(self, american_odds):
@@ -57,18 +83,22 @@ class Calculations:
       self.site2 = self.grid[0][self.index2]
       self.team1 = self.grid[self.index][0]
       self.team2 = self.grid[self.index+1][0]
-      print("======")
-      print("Implied Probability is", impProb)
-      self.printAll()
+      self.impProb = impProb
+      # print("======")
+      # print("Implied Probability is", impProb)
+      self.teamComparison()
       #TODO might want to grab multiple arbitrage oportunities if you can (program doesn't do that yet)
       # assumed pay out is $100
       self.moneyRatio(odds1, odds2, 100)
+      self.emailUser()
+
       return True
     return False
 
   # Finds if there is arbitrage in the grid
   def anyArbitrage(self, grids):
     r=1
+    hasArb = False
     while(r<len(self.grid)):
       # MatchSet is a 2d array with 2 different arrays holding the odds from both sides of a match
       matchSet = [[]]
@@ -89,9 +119,9 @@ class Calculations:
       self.index = r
       # Uses the newly made MatchSet to then find the best chance of arbitrage
       if(self.bestChance(matchSet)):
-        return True
+        hasArb = True
       r+=2
-    return False
+    return hasArb
 
 # Finds the largest element from both arrays in the 2d array and checks if it is an arbitrage or not
 # Also stores the index of the highest value to trace back to the right Bookie
@@ -131,7 +161,13 @@ class Calculations:
 
     #TODO double cheek of ratio works as intended
     # Prints the information to the user
-    print("Bet $%f" %stake1, "on", self.team1, "to win $%f" %(payout - stake1), "profit. Bet 1 needs", ratio1, "times more than Bet 2.")
-    print("Bet $%f" %stake2, "on", self.team2, "to win $%f" %(payout - stake2), "profit. Bet 2 needs", ratio2, "times more than Bet 1.")
-    print("Net profit is $", payout-stake1-stake2)
-    print("======")
+
+    # print("Bet $%f" %stake1, "on", self.team1, "to win $%f" %(payout - stake1), "profit. Bet 1 needs", ratio1, "times more than Bet 2.")
+    # print("Bet $%f" %stake2, "on", self.team2, "to win $%f" %(payout - stake2), "profit. Bet 2 needs", ratio2, "times more than Bet 1.")
+    # print("Net profit is $", payout-stake1-stake2)
+    # print("======")
+
+    self.emailMessage+="Bet ${} on {} to win ${} profit. Bet 1 needs {} times more than Bet 2.\n".format(stake1, self.team1, (payout - stake1), ratio1)
+    self.emailMessage+="Bet ${} on {} to win ${} profit. Bet 2 needs {} times more than Bet 2.\n".format(stake2, self.team2, (payout - stake2), ratio2)
+    self.emailMessage+="Net profit is ${}\n".format(payout-stake1-stake2)
+    self.emailMessage+="======\n"

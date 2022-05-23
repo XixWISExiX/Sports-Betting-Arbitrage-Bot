@@ -63,14 +63,14 @@ class Scraper:
 
   # Finds if there is arbitrage in the grid
   def arbitrage(self):
-    calc = Calculations(self.grid)
+    calc = Calculations(self.grid, self.sportName)
     calc.print()
     #TODO if true send an email to the user
-    # self.sportName
+    # print(self.sportName)
 
-    # print(calc.anyArbitrage(self.grid))
-    if(calc.anyArbitrage(self.grid)):
-      print(self.sportName)
+    print(calc.anyArbitrage(self.grid))
+    # if(calc.anyArbitrage(self.grid)):
+    #   print(self.sportName)
 
   # Grabs the odds using the OddsShard website (MMA ODDS)
   def oddsSharkMMA(self):
@@ -81,7 +81,6 @@ class Scraper:
 
     self.sportName = "MMA"
     website = "https://www.oddsshark.com/ufc/odds"
-    # website = "https://www.oddsshark.com/nhl/odds"
     driver.get(website)
 
     # adds different betting cites to the first array
