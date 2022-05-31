@@ -1,5 +1,6 @@
 from OddsScrapper import Scraper
 import time
+import smtplib
 from threading import Timer
 
 # Creats a scraper object to then scrap data through various means and then find arbitrage afterwards
@@ -21,26 +22,35 @@ def reset(timer, interval, function):
 # There are 86400 seconds in a day (message array refreshes every 24 hours)
 tmr = Timer(86400, dummyMethod, [])
 tmr.start()
+msgArray = ["mogus"]
 
-while(True):
-  if(not tmr.is_alive()):
-    reset(tmr, dummyMethod, ["ok"])
-    msgArray = []
+try:
+  while(True):
+    if(not tmr.is_alive()):
+      reset(tmr, dummyMethod, ["ok"])
+      msgArray = []
 
-  s.oddsSharkMMA()
-  msgArray = s.arbitrage(msgArray)
-  s.clearData()
+    s.oddsSharkMMA()
+    msgArray = s.arbitrage(msgArray)
+    s.clearData()
 
-  s.oddsSharkNHL()
-  msgArray = s.arbitrage(msgArray)
-  s.clearData()
+    s.oddsSharkNHL()
+    msgArray = s.arbitrage(msgArray)
+    s.clearData()
 
-  s.oddsSharkNBA()
-  msgArray = s.arbitrage(msgArray)
-  s.clearData()
+    s.oddsSharkNBA()
+    msgArray = s.arbitrage(msgArray)
+    s.clearData()
 
-  s.oddsSharkMLB()
-  msgArray = s.arbitrage(msgArray)
-  s.clearData()
+    s.oddsSharkMLB()
+    msgArray = s.arbitrage(msgArray)
+    s.clearData()
+except:
+  server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+  server.login("WiseBetz100@gmail.com", "Fr33M0n3y.")
+  server.sendmail("WiseBetz100@gmail.com",
+                  "ReceiverOfGoodNews@gmail.com",
+                  "Program has ended")
+  server.quit()
 
 #TODO might need to check if the same 2 teams are having a match on a different day (could be a future bug)
