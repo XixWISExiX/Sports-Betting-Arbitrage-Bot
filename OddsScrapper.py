@@ -636,143 +636,143 @@ class Scraper:
 
 #------------------------------------------------------------------------------------------
 #TODO EVERYTHING PAST THIS POINT IS EXPIRIMENTAL AND DOESN'T WORK AS INTENDED
-  # def draftKingsMMA(self):
-  #   chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
-  #                                         # and if it doesn't exist, download it automatically,
-  #                                         # then add chromedriver to path
-  #   driver = webdriver.Chrome()
+  def draftKingsMMA(self):
+    chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
+                                          # and if it doesn't exist, download it automatically,
+                                          # then add chromedriver to path
+    driver = webdriver.Chrome()
 
-  #   website = "https://sportsbook.draftkings.com/leagues/mma/88670562"
-  #   driver.get(website)
+    website = "https://sportsbook.draftkings.com/leagues/mma/88670562"
+    driver.get(website)
 
-  #   # Name of team/player
-  #   names = driver.find_elements_by_xpath('//div[@class="sportsbook-outcome-body-wrapper"]/div/span')
-  #   nameArr = []
-  #   for name in names:
-  #     nameArr.append(name.text)
+    # Name of team/player
+    names = driver.find_elements_by_xpath('//div[@class="sportsbook-outcome-body-wrapper"]/div/span')
+    nameArr = []
+    for name in names:
+      nameArr.append(name.text)
 
-  #   # Odds of team/player
-  #   odds = driver.find_elements_by_xpath('//div[@class="sportsbook-outcome-body-wrapper"]/div/div/span')
-  #   oddsArr = []
-  #   for odd in odds:
-  #     oddsArr.append(odd.text)
+    # Odds of team/player
+    odds = driver.find_elements_by_xpath('//div[@class="sportsbook-outcome-body-wrapper"]/div/div/span')
+    oddsArr = []
+    for odd in odds:
+      oddsArr.append(odd.text)
 
-  #   # Checks if the name is in the grid and if it's not, add it along with odds.
-  #   for i in range(len(nameArr)):
-  #     # Checks if the name is in the not in the grid and adds the odds.
-  #     if(not any(nameArr[i] in sublist for sublist in self.grid)):
-  #       self.grid.append([])
-  #       self.grid[len(self.grid)-1].append(nameArr[i])
-  #       self.grid[len(self.grid)-1].append(oddsArr[i])
-  #     else:
-  #       # Adds the odds to the given player array if the player exsists on that array
-  #       for j in range(len(self.grid)):
-  #         if(self.index_of(nameArr[i], self.grid[j]) != -1):
-  #           self.grid[j].append(oddsArr[i])
-  #   # adds '' to names which are not touched by this method
-  #   for i in range(len(self.grid)):
-  #     if(len(self.grid[i]) < 2):
-  #       self.grid[i].append('');
-  #   # print(self.grid)
-  #   driver.close()
+    # Checks if the name is in the grid and if it's not, add it along with odds.
+    for i in range(len(nameArr)):
+      # Checks if the name is in the not in the grid and adds the odds.
+      if(not any(nameArr[i] in sublist for sublist in self.grid)):
+        self.grid.append([])
+        self.grid[len(self.grid)-1].append(nameArr[i])
+        self.grid[len(self.grid)-1].append(oddsArr[i])
+      else:
+        # Adds the odds to the given player array if the player exsists on that array
+        for j in range(len(self.grid)):
+          if(self.index_of(nameArr[i], self.grid[j]) != -1):
+            self.grid[j].append(oddsArr[i])
+    # adds '' to names which are not touched by this method
+    for i in range(len(self.grid)):
+      if(len(self.grid[i]) < 2):
+        self.grid[i].append('');
+    # print(self.grid)
+    driver.close()
   
-  # def CaesarsMMA(self):
-  #   chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
-  #                                         # and if it doesn't exist, download it automatically,
-  #                                         # then add chromedriver to path
-  #   driver = webdriver.Chrome()
+  def CaesarsMMA(self):
+    chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
+                                          # and if it doesn't exist, download it automatically,
+                                          # then add chromedriver to path
+    driver = webdriver.Chrome()
 
-  #   website = "https://www.williamhill.com/us/co/bet/ufcmma"
-  #   driver.get(website)
+    website = "https://www.williamhill.com/us/co/bet/ufcmma"
+    driver.get(website)
 
-  #   # Name of team/player
-  #   names = driver.find_elements_by_xpath('//div[@class="teamLabel maxIOSHeight"]/span')
-  #   nameArr = []
-  #   #TODO not gathering all names
-  #   for name in names:
-  #     nameArr.append(name.text)
-  #   # print(nameArr)
+    # Name of team/player
+    names = driver.find_elements_by_xpath('//div[@class="teamLabel maxIOSHeight"]/span')
+    nameArr = []
+    #TODO not gathering all names
+    for name in names:
+      nameArr.append(name.text)
+    # print(nameArr)
 
-  #   #TODO not gathering all odds
-  #   # Odds of team/player
-  #   odds = driver.find_elements_by_xpath('//div[@class="oddsView"]/div')
-  #   oddsArr = []
-  #   count = 0
-  #   for odd in odds:
-  #     # print(odd.text)
-  #     if (count > 1):
-  #       oddsArr.append(odd.text)
-  #     count+=1
+    #TODO not gathering all odds
+    # Odds of team/player
+    odds = driver.find_elements_by_xpath('//div[@class="oddsView"]/div')
+    oddsArr = []
+    count = 0
+    for odd in odds:
+      # print(odd.text)
+      if (count > 1):
+        oddsArr.append(odd.text)
+      count+=1
 
-  #   # print(oddsArr)
+    # print(oddsArr)
 
-  #   # print(self.grid)
-  #   # Checks if the name is in the grid and if it's not, add it along with odds.
-  #   for i in range(len(nameArr)):
-  #     # Checks if the name is in the not in the grid and adds the odds.
-  #     if(not any(nameArr[i] in sublist for sublist in self.grid)):
-  #       #TODO this could be wrong
-  #       self.grid.append([])
-  #       self.grid[len(self.grid)-1].append(nameArr[i])
-  #       # Adds a none because Draft kings doesn't have a list if this is checked
-  #       self.grid[len(self.grid)-1].append('')
-  #       self.grid[len(self.grid)-1].append(oddsArr[i])
-  #     else:
-  #       # Adds the odds to the given player array if the player exsists on that array
-  #       for j in range(len(self.grid)):
-  #         if(self.index_of(nameArr[i], self.grid[j]) != -1):
-  #           self.grid[j].append(oddsArr[i])
-  #   # adds '' to names which are not touched by this method
-  #   for i in range(len(self.grid)):
-  #     # if(len(self.grid[i]) < len(self.grid[0])):
-  #     if(len(self.grid[i]) < 3):
-  #       self.grid[i].append('');
+    # print(self.grid)
+    # Checks if the name is in the grid and if it's not, add it along with odds.
+    for i in range(len(nameArr)):
+      # Checks if the name is in the not in the grid and adds the odds.
+      if(not any(nameArr[i] in sublist for sublist in self.grid)):
+        #TODO this could be wrong
+        self.grid.append([])
+        self.grid[len(self.grid)-1].append(nameArr[i])
+        # Adds a none because Draft kings doesn't have a list if this is checked
+        self.grid[len(self.grid)-1].append('')
+        self.grid[len(self.grid)-1].append(oddsArr[i])
+      else:
+        # Adds the odds to the given player array if the player exsists on that array
+        for j in range(len(self.grid)):
+          if(self.index_of(nameArr[i], self.grid[j]) != -1):
+            self.grid[j].append(oddsArr[i])
+    # adds '' to names which are not touched by this method
+    for i in range(len(self.grid)):
+      # if(len(self.grid[i]) < len(self.grid[0])):
+      if(len(self.grid[i]) < 3):
+        self.grid[i].append('');
 
-  #   # print(self.grid)
-  #   driver.close()
+    # print(self.grid)
+    driver.close()
 
-  # def FanduelMMA(self):
-  #   # chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
-  #   #                                       # and if it doesn't exist, download it automatically,
-  #   #                                       # then add chromedriver to path
-  #   # driver = webdriver.Chrome()
+  def FanduelMMA(self):
+    # chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
+    #                                       # and if it doesn't exist, download it automatically,
+    #                                       # then add chromedriver to path
+    # driver = webdriver.Chrome()
 
-  #   website = "https://nj.pointsbet.com/sports/mma/UFC"
-  #   self.driver.get(website)
+    website = "https://nj.pointsbet.com/sports/mma/UFC"
+    self.driver.get(website)
 
-  #   # Name of team/player
-  #   # names = driver.find_elements_by_xpath('//span[@class="ae aj iu iv iw ix ij ik il io iy s gd dw iz h i j ak l m al o am q an br"]')
-  #   names = self.driver.find_elements_by_xpath('//span[@class="f1fdaby6"]')
-  #   nameArr = []
-  #   print("sad")
-  #   for name in names:
-  #     print(name.text)
-  #     nameArr.append(name.text)
+    # Name of team/player
+    # names = driver.find_elements_by_xpath('//span[@class="ae aj iu iv iw ix ij ik il io iy s gd dw iz h i j ak l m al o am q an br"]')
+    names = self.driver.find_elements_by_xpath('//span[@class="f1fdaby6"]')
+    nameArr = []
+    print("sad")
+    for name in names:
+      print(name.text)
+      nameArr.append(name.text)
 
-  #   # Odds of team/player
-  #   odds = self.driver.find_elements_by_xpath('//span[@class="fheif50"]')
-  #   oddsArr = []
-  #   for odd in odds:
-  #     print(odd.text)
-  #     oddsArr.append(odd.text)
+    # Odds of team/player
+    odds = self.driver.find_elements_by_xpath('//span[@class="fheif50"]')
+    oddsArr = []
+    for odd in odds:
+      print(odd.text)
+      oddsArr.append(odd.text)
 
-  #   # Checks if the name is in the grid and if it's not, add it along with odds.
-  #   for i in range(len(nameArr)):
-  #     # Checks if the name is in the not in the grid and adds the odds.
-  #     if(not any(nameArr[i] in sublist for sublist in self.grid)):
-  #       self.grid.append([])
-  #       self.grid[len(self.grid)-1].append(nameArr[i])
-  #       self.grid[len(self.grid)-1].append(oddsArr[i])
-  #     else:
-  #       # Adds the odds to the given player array if the player exsists on that array
-  #       for j in range(len(self.grid)):
-  #         if(self.index_of(nameArr[i], self.grid[j]) != -1):
-  #           self.grid[j].append(oddsArr[i])
-  #   # adds '' to names which are not touched by this method
-  #   for i in range(len(self.grid)):
-  #     # The integer number should change with the position which the code is being declaired
-  #     if(len(self.grid[i]) < 4):
-  #       self.grid[i].append('');
-  #       # self.grid[i].append('');
-  #   # print(self.grid)
-  #   self.driver.close()
+    # Checks if the name is in the grid and if it's not, add it along with odds.
+    for i in range(len(nameArr)):
+      # Checks if the name is in the not in the grid and adds the odds.
+      if(not any(nameArr[i] in sublist for sublist in self.grid)):
+        self.grid.append([])
+        self.grid[len(self.grid)-1].append(nameArr[i])
+        self.grid[len(self.grid)-1].append(oddsArr[i])
+      else:
+        # Adds the odds to the given player array if the player exsists on that array
+        for j in range(len(self.grid)):
+          if(self.index_of(nameArr[i], self.grid[j]) != -1):
+            self.grid[j].append(oddsArr[i])
+    # adds '' to names which are not touched by this method
+    for i in range(len(self.grid)):
+      # The integer number should change with the position which the code is being declaired
+      if(len(self.grid[i]) < 4):
+        self.grid[i].append('');
+        # self.grid[i].append('');
+    # print(self.grid)
+    self.driver.close()

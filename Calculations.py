@@ -85,6 +85,7 @@ class Calculations:
 
   # Determins if 2 odds have Arbitrage and if so, returns true. This method also prints out arbitrage information to the user
   def isArbitrage(self, odds1, odds2):
+    self.emailMessage = "" #TODO make change
     impProb = self.impliedProbability(odds1, odds2)
     wasEmailed = False
     if(impProb < 1):
@@ -102,12 +103,19 @@ class Calculations:
       # assumed pay out is $100
       self.moneyRatio(odds1, odds2, 100)
 
+      # print("what?")
       for array in self.emailMsgArray:
-        if(array == self.emailMessage):
+        # if(array == self.emailMessage):
+        if(array.__eq__(self.emailMessage)):
           wasEmailed = True
+          # print("wasEmailed")
       if(not wasEmailed):
         self.emailUser()
+        # print("ok")
         self.emailMsgArray.append(self.emailMessage)
+        self.emailMessage = "" #TODO make change
+        wasEmailed = True
+        # print(self.emailMessage)
 
       return True
     return False
@@ -115,8 +123,10 @@ class Calculations:
   # Finds if there is arbitrage in the grid
   def anyArbitrage(self, grids):
     r=1
+    x=0
     hasArb = False
     while(r<len(self.grid)):
+      notReapeat = False
       # MatchSet is a 2d array with 2 different arrays holding the odds from both sides of a match
       matchSet = [[]]
       matchSet.append([])
@@ -135,7 +145,8 @@ class Calculations:
             matchSet[1].append(None)
       self.index = r
       # Uses the newly made MatchSet to then find the best chance of arbitrage
-      if(self.bestChance(matchSet)):
+      if(self.bestChance(matchSet) and x < 2):
+        x+=1
         hasArb = True
       r+=2
     #TODO do something here

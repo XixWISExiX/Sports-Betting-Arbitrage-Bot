@@ -30,21 +30,30 @@ try:
       reset(tmr, dummyMethod, ["ok"])
       msgArray = []
 
-    s.oddsSharkMMA()
+    # s.oddsSharkMMA()
+    # msgArray = s.arbitrage(msgArray)
+    # s.clearData()
+
+    # s.oddsSharkNHL()
+    # msgArray = s.arbitrage(msgArray)
+    # s.clearData()
+
+    # s.oddsSharkNBA()
+    # msgArray = s.arbitrage(msgArray)
+    # s.clearData()
+
+    s.draftKingsMMA()
+    s.CaesarsMMA()
+    # s.FanduelMMA() #TODO this one doesn't work. add ones that do or just make it work
     msgArray = s.arbitrage(msgArray)
     s.clearData()
 
-    s.oddsSharkNHL()
-    msgArray = s.arbitrage(msgArray)
-    s.clearData()
+    #TODO make change
+    # s.oddsSharkMLB()
+    # msgArray = s.arbitrage(msgArray)
+    # s.clearData()
 
-    s.oddsSharkNBA()
-    msgArray = s.arbitrage(msgArray)
-    s.clearData()
-
-    s.oddsSharkMLB()
-    msgArray = s.arbitrage(msgArray)
-    s.clearData()
+    break
 except:
   server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
   server.login("WiseBetz100@gmail.com", "Fr33M0n3y.")
