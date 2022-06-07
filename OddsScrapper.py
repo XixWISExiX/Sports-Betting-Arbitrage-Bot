@@ -2,9 +2,11 @@ import math
 from unittest import skip
 
 import pandas as pd
+import time
 from Calculations import Calculations
 from selenium import webdriver
 import chromedriver_autoinstaller
+from selenium.webdriver.chrome.options import Options
 
 # Scrapper object which makes a grid to hold the name of the players and the odds of the given matches with their
 # corrisponding sports books
@@ -13,9 +15,10 @@ class Scraper:
     self.grid = [[]]
     self.sportName = ""
     # self.grid.append([])
-    # self.grid[0].append("Players Names")
-    # self.grid[0].append("Draft Kings")
-    # self.grid[0].append("Caesars")
+    self.grid[0].append("Players Names")
+    self.grid[0].append("Draft Kings")
+    self.grid[0].append("Caesars")
+    self.options = Options()
     # self.grid[0].append("Fanduel")
 
   # prints out the grid
@@ -637,10 +640,11 @@ class Scraper:
 #------------------------------------------------------------------------------------------
 #TODO EVERYTHING PAST THIS POINT IS EXPIRIMENTAL AND DOESN'T WORK AS INTENDED
   def draftKingsMMA(self):
+    self.options.headless = True
     chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
                                           # and if it doesn't exist, download it automatically,
                                           # then add chromedriver to path
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome(options=self.options)
 
     website = "https://sportsbook.draftkings.com/leagues/mma/88670562"
     driver.get(website)
@@ -667,7 +671,7 @@ class Scraper:
       else:
         # Adds the odds to the given player array if the player exsists on that array
         for j in range(len(self.grid)):
-          if(self.index_of(nameArr[i], self.grid[j]) != -1):
+          if(self.index_of(nameArr[i], self.grid[j][0]) != -1):
             self.grid[j].append(oddsArr[i])
     # adds '' to names which are not touched by this method
     for i in range(len(self.grid)):
@@ -676,21 +680,33 @@ class Scraper:
     # print(self.grid)
     driver.close()
   
+  #TODO extra added on players my be a spelling error and in that case something must be done
   def CaesarsMMA(self):
+    self.options.headless = True 
     chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
                                           # and if it doesn't exist, download it automatically,
                                           # then add chromedriver to path
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome(options=self.options)
+    # driver = webdriver.Chrome()
 
     website = "https://www.williamhill.com/us/co/bet/ufcmma"
     driver.get(website)
 
+    #TODO This loads the whole site to scrap all the odds needed (might need to be increased)
+    driver.execute_script("window.scrollTo(0, 1200);")
+    time.sleep(0.15)
+    # time.sleep(0.5)
+    driver.execute_script("window.scrollTo(0, 2400);")
+    time.sleep(0.15)
+
     # Name of team/player
     names = driver.find_elements_by_xpath('//div[@class="teamLabel maxIOSHeight"]/span')
     nameArr = []
-    #TODO not gathering all names
+
     for name in names:
+      print(name.text)
       nameArr.append(name.text)
+      # time.sleep(0.1)
     # print(nameArr)
 
     #TODO not gathering all odds
@@ -700,7 +716,9 @@ class Scraper:
     count = 0
     for odd in odds:
       # print(odd.text)
-      if (count > 1):
+      #TODO 3 is a number which might need to change for this variable
+      if (count > 3):
+        # print(odd.text)
         oddsArr.append(odd.text)
       count+=1
 
@@ -720,8 +738,16 @@ class Scraper:
       else:
         # Adds the odds to the given player array if the player exsists on that array
         for j in range(len(self.grid)):
-          if(self.index_of(nameArr[i], self.grid[j]) != -1):
+          # print(self.grid[j][0])
+          indexNum = self.index_of(nameArr[i], self.grid[j][0])
+          if(indexNum != -1):
+            # print(self.grid[j])
             self.grid[j].append(oddsArr[i])
+            # print("conversion")
+            # print(oddsArr[i])
+            # print(".")
+            # print(self.grid[j])
+            # self.grid[j].append(oddsArr[indexNum])
     # adds '' to names which are not touched by this method
     for i in range(len(self.grid)):
       # if(len(self.grid[i]) < len(self.grid[0])):
@@ -732,10 +758,10 @@ class Scraper:
     driver.close()
 
   def FanduelMMA(self):
-    # chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
-    #                                       # and if it doesn't exist, download it automatically,
-    #                                       # then add chromedriver to path
-    # driver = webdriver.Chrome()
+    chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
+                                          # and if it doesn't exist, download it automatically,
+                                          # then add chromedriver to path
+    driver = webdriver.Chrome()
 
     website = "https://nj.pointsbet.com/sports/mma/UFC"
     self.driver.get(website)

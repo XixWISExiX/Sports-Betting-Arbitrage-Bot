@@ -135,7 +135,7 @@ class Calculations:
       matchSet[1].append(None)
       for c in range(len(self.grid[0])):
         # Skips the first list and the first index of each list
-        if(r+1 != 0 and r != 0 and c != 0):
+        if(r+1 != 0 and r != 0 and c != 0 and r+1 > len(self.grid)):
           if(grids[r][c] != '' and grids[r+1][c] != ''):
             matchSet[0].append(int(grids[r][c]))
             matchSet[1].append(int(grids[r+1][c]))
