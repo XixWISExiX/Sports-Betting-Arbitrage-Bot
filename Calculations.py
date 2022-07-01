@@ -1,6 +1,9 @@
 import smtplib
 # Imports the main grid variable from odds Scrapper (calculates arbitrage with the format given from the scrapper class)
 # Only calculates arbitrage for 2 possible out comes, meaning no parlays and no draw odds.
+
+# https://www.pinnacle.com/en/betting-resources/betting-tools/arbitrage-calculator
+
 class Calculations:
   def __init__(self, grid, sportName) -> None:
     # The grid to preform calculations on
@@ -65,7 +68,7 @@ class Calculations:
 
   def emailUser(self):
     server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
-    server.login("WiseBetz100@gmail.com", "Fr33M0n3y.")
+    server.login("WiseBetz100@gmail.com", "wrpierwlyhfdeujv")
     server.sendmail("WiseBetz100@gmail.com",
                     "ReceiverOfGoodNews@gmail.com",
                     self.emailMessage)
@@ -85,7 +88,7 @@ class Calculations:
 
   # Determins if 2 odds have Arbitrage and if so, returns true. This method also prints out arbitrage information to the user
   def isArbitrage(self, odds1, odds2):
-    self.emailMessage = "" #TODO make change
+    self.emailMessage = ""
     impProb = self.impliedProbability(odds1, odds2)
     wasEmailed = False
     if(impProb < 1):
@@ -135,7 +138,7 @@ class Calculations:
       matchSet[1].append(None)
       for c in range(len(self.grid[0])):
         # Skips the first list and the first index of each list
-        if(r+1 != 0 and r != 0 and c != 0 and r+1 > len(self.grid)):
+        if(r+1 != 0 and r != 0 and c != 0 and r+1 < len(self.grid)):
           if(grids[r][c] != '' and grids[r+1][c] != ''):
             matchSet[0].append(int(grids[r][c]))
             matchSet[1].append(int(grids[r+1][c]))
@@ -156,6 +159,7 @@ class Calculations:
 # Also stores the index of the highest value to trace back to the right Bookie
   def bestChance(self, matchSet):
     # Finds the largest value for the first set
+    # print(matchSet)
     large1 = -100000
     for i in range(len(matchSet[0])):
       if(matchSet[0][i] != None):

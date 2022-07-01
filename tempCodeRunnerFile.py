@@ -1,0 +1,2 @@
+
+    # msgArray = s.arbitrage(msgArray)

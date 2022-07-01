@@ -30,6 +30,10 @@ try:
       reset(tmr, dummyMethod, ["ok"])
       msgArray = []
 
+    s.testData1()
+    msgArray = s.arbitrage(msgArray)
+    s.clearData()
+
     # s.oddsSharkMMA()
     # msgArray = s.arbitrage(msgArray)
     # s.clearData()
@@ -42,11 +46,11 @@ try:
     # msgArray = s.arbitrage(msgArray)
     # s.clearData()
 
-    s.draftKingsMMA()
-    s.CaesarsMMA()
-    # s.FanduelMMA() #TODO this one doesn't work. add ones that do or just make it work
-    msgArray = s.arbitrage(msgArray)
-    s.clearData()
+    # s.draftKingsMMA()
+    # s.CaesarsMMA()
+    # # s.FanduelMMA() #TODO this one doesn't work. add ones that do or just make it work
+    # msgArray = s.arbitrage(msgArray)
+    # s.clearData()
 
     #TODO make change
     # s.oddsSharkMLB()
@@ -56,7 +60,8 @@ try:
     break
 except:
   server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
-  server.login("WiseBetz100@gmail.com", "Fr33M0n3y.")
+  # OLD METHOD -> server.login("WiseBetz100@gmail.com", "Fr33M0n3y.")
+  server.login("WiseBetz100@gmail.com", "wrpierwlyhfdeujv")
   server.sendmail("WiseBetz100@gmail.com",
                   "ReceiverOfGoodNews@gmail.com",
                   "Program has ended")
